@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
+require 'Deck.php';
+
 class Player{
-    private array $cards = [];
-    private bool $lost = false;
+    private $cards = [];
+    private $lost = false;
     private const maxVal = 21;
 
     public function __construct(Deck $deck)
@@ -12,7 +14,7 @@ class Player{
 
     }
 
-public function hit(){
+public function hit(Deck $deck) :void{
 array_push($this->cards,$deck->drawCard());
 // if($this->getScore()>21)
 //use class constant
@@ -21,19 +23,20 @@ $this->lost=true;
 }
 }
 
-public function surrender(){
+public function surrender() :void{
     $this->lost =true;
 }
 
-public function getScore(DECK $deck){
-    foreach ($this->cards as  $value) {
-        $totalValue += cards->getValue();
+public function getScore(Deck $deck) :int{
+    $totalValue =0;
+    foreach ($this->cards as $card) {
+        $totalValue += $card->getValue();
      
     }
     return $totalValue;
 }
 
-public function hasLost(){
+public function hasLost():bool{
    return $this->lost; 
 }
 }

@@ -34,14 +34,5 @@ class Blackjack{
 
 
 
-
-
-
-
-
-
-
-
-
-
 }
+?>
