@@ -9,10 +9,42 @@ require 'suit.php';
 require 'Blackjack.php';
 require 'Dealer.php';
 
+
 session_start();
+
 if (!isset($_SESSION['blackjack'])) {
-    $_SESSION['blackjack'] = new Blackjack();
+    $blackjack = new blackjack();
+    $_SESSION['blackjack'] = serialize($blackjack);
+} else {
+    $blackjack = unserialize($_SESSION['blackjack']);
 }
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST["hit"])) {
+        $blackJack->getPlayer()->hit($blackJack->getDeck());
+        $_SESSION['blackjack'] = $blackjack;
+    }
+   
+    if (isset($_POST["surrender"])) {
+        $blackJack->getPlayer()->surrender();
+        $_SESSION['blackjack'] = $blackjack;
+
+    }
+    if(isset($_POST['stand'])) {
+        $blackjack->getDealer()->stand($blackjack->getDeck());
+        $_SESSION['blackjack'] = $blackjack;
+      }
+      $result = $blackjack->getResult();
+}
+
+foreach ($blackjack->getPlayer()->getPlayerCards() as $card) {
+    array_push($playerCards, $card->getUnicodeCharacter(true));
+}
+
+foreach ($blackjack->getDealer()->getPlayerCards() as $card) {
+    array_push($dealerCards, $card->getUnicodeCharacter(true));
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -34,3 +66,5 @@ if (!isset($_SESSION['blackjack'])) {
 
 </body>
 </html>
+   
+    
